@@ -9,6 +9,6 @@ namespace DataAccess.Abstract
 {
     public interface IEducationContentDal : IEntityRepository<EducationContent>
     {
-        List<SelectEducationContentDto> GetAllEducationContentByEdId(int educationId);
+        List<SelectEducationContentDto> GetAllEdContentByEdId(int educationId);
     }
 }

@@ -1,11 +1,12 @@
-﻿using Core.Entities;
+﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Entities.Dtos.EducationContent.Select
+namespace Entities.EntityParameter.EducationContent
 {
-    public class SelectEducationContentDto : IDto
+    public class EducationContentFile
     {
         public int EducationContentId { get; set; }
         public int EducationId { get; set; }
@@ -13,5 +14,8 @@ namespace Entities.Dtos.EducationContent.Select
         public string Title { get; set; }
         public string Description { get; set; }
         public string Path { get; set; }
+
+        [NotMapped]
+        public IFormFile File { get; set; }
     }
 }

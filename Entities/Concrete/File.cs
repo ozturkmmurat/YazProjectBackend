@@ -10,5 +10,11 @@ namespace Entities.Concrete
         public int Id { get; set; }
         public int EducationContentId { get; set; }
         public string Path { get; set; }
+        public DateTime CreateDate { get; set; }
+
+        public File()
+        {
+            CreateDate = DateTime.Now;
+        }
     }
 }

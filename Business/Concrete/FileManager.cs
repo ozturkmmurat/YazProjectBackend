@@ -1,8 +1,11 @@
 ﻿using Business.Abstract;
+using Business.Constans;
+using Core.Helpers.FileHelper;
 using Core.Utilities.Result.Abstract;
 using Core.Utilities.Result.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,14 +15,19 @@ namespace Business.Concrete
     public class FileManager : IFileService
     {
         IFileDal _fileDal;
-        public FileManager(IFileDal fileDal)
+        IFileHelper _fileHelper;
+        public FileManager(
+            IFileDal fileDal,
+            IFileHelper fileHelper)
         {
             _fileDal = fileDal;
+            _fileHelper = fileHelper;
         }
-        public IResult Add(File file)
+        public IResult Add(File file, IFormFile formFile)
         {
             if (file != null)
             {
+                file.Path = _fileHelper.Upload(formFile, PathConstans.ImagesPath);
                 _fileDal.Add(file);
                 return new SuccessResult();
             }
@@ -46,10 +54,24 @@ namespace Business.Concrete
             return new ErrorDataResult<List<File>>();
         }
 
-        public IResult Update(File file)
+        public IDataResult<File> GetById(int id)
+        {
+            var result = _fileDal.Get(x => x.Id == id);
+            if (result != null)
+            {
+                return new SuccessDataResult<File>(result);
+            }
+            return new ErrorDataResult<File>();
+        }
+
+        public IResult Update(File file, IFormFile formFile)
         {
             if (file != null)
             {
+                if(formFile != null)
+                {
+                    file.Path = _fileHelper.Upload(formFile, PathConstans.ImagesPath);
+                }
                 _fileDal.Update(file);
                 return new SuccessResult();
             }

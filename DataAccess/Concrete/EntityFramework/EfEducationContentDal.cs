@@ -12,17 +12,20 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfEducationContentDal : EfEntityRepositoryBase<EducationContent, YazContext>, IEducationContentDal
     {
-        public List<SelectEducationContentDto> GetAllEducationContentByEdId(int educationId)
+        public List<SelectEducationContentDto> GetAllEdContentByEdId(int educationId)
         {
             using (YazContext context = new YazContext())
             {
                 var result = from ec in context.EducationContents.Where(x => x.EducationId == educationId)
+                             join e in context.Educations
+                             on ec.EducationId equals e.Id
                              join f in context.Files
                              on ec.Id equals f.EducationContentId
 
                              select new SelectEducationContentDto
                              {
                                  EducationContentId = ec.Id,
+                                 EducationId = e.Id,
                                  FileId = f.Id,
                                  Title = ec.Title,
                                  Description = ec.Description,
