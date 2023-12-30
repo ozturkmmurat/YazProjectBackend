@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constans;
 using Core.Helpers.FileHelper;
 using Core.Utilities.Result.Abstract;
@@ -23,6 +24,9 @@ namespace Business.Concrete
             _fileDal = fileDal;
             _fileHelper = fileHelper;
         }
+
+        [SecuredOperation("admin")]
+
         public IResult Add(File file, IFormFile formFile)
         {
             if (file != null)
@@ -34,6 +38,7 @@ namespace Business.Concrete
             return new ErrorResult();
         }
 
+        [SecuredOperation("admin")]
         public IResult Delete(File file)
         {
             if (file != null)
@@ -63,6 +68,8 @@ namespace Business.Concrete
             }
             return new ErrorDataResult<File>();
         }
+
+        [SecuredOperation("admin")]
 
         public IResult Update(File file, IFormFile formFile)
         {

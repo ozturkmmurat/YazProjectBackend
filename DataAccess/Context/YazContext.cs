@@ -13,8 +13,8 @@ namespace DataAccess.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //optionsBuilder.UseSqlServer("Server=DESKTOP-K1G3PAC;Database=PofuMacrame;Trusted_Connection=True;");
-                optionsBuilder.UseSqlServer("Server=YAYIN01;Database=YazProject; User ID=murat;Password=123456;Connect Timeout=30;MultiSubnetFailover=False;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-K1G3PAC;Database=YazProject;Trusted_Connection=True;");
+                //optionsBuilder.UseSqlServer("Server=YAYIN01;Database=YazProject; User ID=murat;Password=123456;Connect Timeout=30;MultiSubnetFailover=False;");
             }
         }
 

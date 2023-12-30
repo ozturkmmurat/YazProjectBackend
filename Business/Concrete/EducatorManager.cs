@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Core.Utilities.Result.Abstract;
 using Core.Utilities.Result.Concrete;
 using DataAccess.Abstract;
@@ -16,6 +17,8 @@ namespace Business.Concrete
         {
             _educatorDal = educatorDal;
         }
+
+        [SecuredOperation("admin")]
         public IResult Add(Educator educator)
         {
             if (educator != null)
@@ -26,6 +29,7 @@ namespace Business.Concrete
             return new ErrorResult();
         }
 
+        [SecuredOperation("admin")]
         public IResult Delete(Educator educator)
         {
             if (educator != null)
@@ -35,6 +39,7 @@ namespace Business.Concrete
             }
             return new ErrorResult();
         }
+
 
         public IDataResult<List<Educator>> GetAll()
         {
@@ -46,6 +51,7 @@ namespace Business.Concrete
             return new ErrorDataResult<List<Educator>>();
         }
 
+        [SecuredOperation("admin")]
         public IResult Update(Educator educator)
         {
             if (educator != null)

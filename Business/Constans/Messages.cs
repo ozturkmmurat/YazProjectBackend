@@ -32,5 +32,6 @@ namespace Business.Constans
         public static string FailedEmailCheck = "Böyle bir mail adresi bulunmamaktadır.";
         public static string FindFailedUser = "Kullanıcı bulunamadı";
         public static string QuotaFull = "Kontejan dolu";
+        public static string UserEducationCheck = "Böyle bir eğitimi almışsınız";
     }
 }

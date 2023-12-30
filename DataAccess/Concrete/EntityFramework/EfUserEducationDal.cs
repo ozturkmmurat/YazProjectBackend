@@ -25,7 +25,7 @@ namespace DataAccess.Concrete.EntityFramework
                              select new SelectUserEducationDto
                              {
                                  UserEducationId = ue.Id,
-                                 EdicationId = e.Id,
+                                 EducationId = e.Id,
                                  Status = ue.Status,
                                  EducationTitle = e.Title,
                                  EducationDescription = e.Description,
