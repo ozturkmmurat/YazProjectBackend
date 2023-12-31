@@ -9,6 +9,8 @@ using Core.Utilities.Interceptors;
 using Core.Utilities.Security.JWT;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
+using DataAccess.Context;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -21,35 +23,36 @@ namespace Business.DependecyResolvers.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<EfEducationDal>().As<IEducationDal>().SingleInstance();
-            builder.RegisterType<EducationManager>().As<IEducationService>().SingleInstance();
+            builder.RegisterType<EfEducationDal>().As<IEducationDal>().InstancePerLifetimeScope();
+            builder.RegisterType<EducationManager>().As<IEducationService>().InstancePerLifetimeScope();
 
-            builder.RegisterType<EfEducationContentDal>().As<IEducationContentDal>().SingleInstance();
-            builder.RegisterType<EducationContentManager>().As<IEducationContentService>().SingleInstance();
+            builder.RegisterType<EfEducationContentDal>().As<IEducationContentDal>().InstancePerLifetimeScope();
+            builder.RegisterType<EducationContentManager>().As<IEducationContentService>().InstancePerLifetimeScope();
 
-            builder.RegisterType<EfEducatorDal>().As<IEducatorDal>().SingleInstance();
-            builder.RegisterType<EducatorManager>().As<IEducatorService>().SingleInstance();
+            builder.RegisterType<EfEducatorDal>().As<IEducatorDal>().InstancePerLifetimeScope();
+            builder.RegisterType<EducatorManager>().As<IEducatorService>().InstancePerLifetimeScope();
 
-            builder.RegisterType<EfUserEducationDal>().As<IUserEducationDal>().SingleInstance();
-            builder.RegisterType<UserEducationManager>().As<IUserEducationService>().SingleInstance();
+            builder.RegisterType<EfUserEducationDal>().As<IUserEducationDal>().InstancePerLifetimeScope();
+            builder.RegisterType<UserEducationManager>().As<IUserEducationService>().InstancePerLifetimeScope();
 
-            builder.RegisterType<EfFileDal>().As<IFileDal>().SingleInstance();
-            builder.RegisterType<FileManager>().As<IFileService>().SingleInstance();
+            builder.RegisterType<EfFileDal>().As<IFileDal>().InstancePerLifetimeScope();
+            builder.RegisterType<FileManager>().As<IFileService>().InstancePerLifetimeScope();
 
-            builder.RegisterType<UserManager>().As<IUserService>().SingleInstance();
-            builder.RegisterType<EfUserDal>().As<IUserDal>().SingleInstance();
+            builder.RegisterType<UserManager>().As<IUserService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfUserDal>().As<IUserDal>().InstancePerLifetimeScope();
 
-            builder.RegisterType<OperationClaimManager>().As<IOperationClaimService>().SingleInstance();
-            builder.RegisterType<EfOperationClaimDal>().As<IOperationClaimDal>().SingleInstance();
+            builder.RegisterType<OperationClaimManager>().As<IOperationClaimService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfOperationClaimDal>().As<IOperationClaimDal>().InstancePerLifetimeScope();
 
-            builder.RegisterType<UserOperationClaimManager>().As<IUserOperationClaimService>().SingleInstance();
-            builder.RegisterType<EfUserOperationClaimDal>().As<IUserOperationClaimDal>().SingleInstance();
+            builder.RegisterType<UserOperationClaimManager>().As<IUserOperationClaimService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfUserOperationClaimDal>().As<IUserOperationClaimDal>().InstancePerLifetimeScope();
 
+            builder.RegisterType<AuthManager>().As<IAuthService>().InstancePerLifetimeScope();
+            builder.RegisterType<JwtHelper>().As<ITokenHelper>().InstancePerLifetimeScope();
 
-            builder.RegisterType<AuthManager>().As<IAuthService>().SingleInstance();
-            builder.RegisterType<JwtHelper>().As<ITokenHelper>().SingleInstance();
+            builder.RegisterType<FileHelperManager>().As<IFileHelper>().InstancePerLifetimeScope();
 
-            builder.RegisterType<FileHelperManager>().As<IFileHelper>().SingleInstance();
+            builder.RegisterType<YazContext>().InstancePerLifetimeScope();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
@@ -57,7 +60,7 @@ namespace Business.DependecyResolvers.Autofac
                 .EnableInterfaceInterceptors(new ProxyGenerationOptions()
                 {
                     Selector = new AspectInterceptorSelector()
-                }).SingleInstance();
+                }).InstancePerLifetimeScope();
         }
     }
 }

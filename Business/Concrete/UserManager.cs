@@ -2,8 +2,10 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constans;
 using Business.ValidationRules.FluentValidation.User;
+using Core.Aspects.Autofac.Logging;
 using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingConcerns.Logging.Serilog.Loggers;
 using Core.Entities.Concrete;
 using Core.Entities.Dtos;
 using Core.Utilities.Result.Abstract;
@@ -18,14 +20,13 @@ using System.Text;
 
 namespace Business.Concrete
 {
+    [LogAspect(typeof(FileLogger))]
     public class UserManager : IUserService
     {
         IUserDal _userDal;
-        IUserOperationClaimService _userOperationClaimService;
-        public UserManager(IUserDal userDal, IUserOperationClaimService userOperationClaimService)
+        public UserManager(IUserDal userDal)
         {
             _userDal = userDal;
-            _userOperationClaimService = userOperationClaimService;
         }
         [ValidationAspect(typeof(UserValidator))]
         public IResult Add(User user)

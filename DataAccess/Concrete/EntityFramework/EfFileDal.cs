@@ -11,5 +11,8 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfFileDal : EfEntityRepositoryBase<File, YazContext>, IFileDal
     {
+        public EfFileDal(YazContext context) : base(context)
+        {
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace Business.Abstract
 {
     public interface IUserEducationService
     {
+        IDataResult<List<SelectUserEdApplicantDto>> GetAllEducationApplicant(int educationId);
         IDataResult<List<SelectUserEducationDto>> GetAllSelectUserEducation(int userId);
         IDataResult<UserEducation> GetByUserEducation(int userId, int educationId);
         IDataResult<int> GetNoCancelUserEducationLength(int educationId);

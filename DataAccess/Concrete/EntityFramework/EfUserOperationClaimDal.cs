@@ -11,5 +11,8 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfUserOperationClaimDal : EfEntityRepositoryBase<UserOperationClaim, YazContext>, IUserOperationClaimDal
     {
+        public EfUserOperationClaimDal(YazContext context) : base(context)
+        {
+        }
     }
 }

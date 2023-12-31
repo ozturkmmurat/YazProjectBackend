@@ -9,6 +9,8 @@ namespace DataAccess.Context
 {
     public class YazContext : DbContext
     {
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

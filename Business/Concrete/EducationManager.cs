@@ -1,4 +1,11 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
+using Business.ValidationRules.File;
+using Business.ValidationRules.FluentValidation.Education;
+using Business.ValidationRules.FluentValidation.Educator;
+using Core.Aspects.Autofac.Logging;
+using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingConcerns.Logging.Serilog.Loggers;
 using Core.Utilities.Result.Abstract;
 using Core.Utilities.Result.Concrete;
 using DataAccess.Abstract;
@@ -10,6 +17,7 @@ using System.Text;
 
 namespace Business.Concrete
 {
+    [LogAspect(typeof(FileLogger))]
     public class EducationManager : IEducationService
     {
         IEducationDal _educationDal;
@@ -17,6 +25,9 @@ namespace Business.Concrete
         {
             _educationDal = educationDal;
         }
+
+        [ValidationAspect(typeof(EducationValidator))]
+        [SecuredOperation("admin")]
         public IResult Add(Education education)
         {
             if (education != null)
@@ -27,6 +38,7 @@ namespace Business.Concrete
             return new ErrorResult();
         }
 
+        [ValidationAspect(typeof(EducationValidator))]
         public IResult Delete(Education education)
         {
             if (education != null)
@@ -53,6 +65,8 @@ namespace Business.Concrete
             return new SuccessDataResult<int>(result);
         }
 
+        [ValidationAspect(typeof(EducationValidator))]
+        [SecuredOperation("admin")]
         public IResult Update(Education education)
         {
            if (education != null)

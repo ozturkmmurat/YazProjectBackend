@@ -1,7 +1,12 @@
 ﻿using Business.Abstract;
 using Business.BusinessAspects.Autofac;
 using Business.Constans;
+using Business.ValidationRules.File;
+using Business.ValidationRules.FluentValidation.UserEducation;
+using Core.Aspects.Autofac.Logging;
+using Core.Aspects.Autofac.Validation;
 using Core.Business;
+using Core.CrossCuttingConcerns.Logging.Serilog.Loggers;
 using Core.Entities.Concrete;
 using Core.Utilities.Result.Abstract;
 using Core.Utilities.Result.Concrete;
@@ -14,6 +19,7 @@ using System.Text;
 
 namespace Business.Concrete
 {
+    [LogAspect(typeof(FileLogger))]
     public class UserEducationManager : IUserEducationService
     {
         IUserEducationDal _userEducationDal;
@@ -27,6 +33,7 @@ namespace Business.Concrete
         }
 
         [SecuredOperation("user,admin")]
+        [ValidationAspect(typeof(UserEducationValidator))]
         public IResult Add(UserEducation userEducation)
         {
             if (userEducation != null)
@@ -60,10 +67,10 @@ namespace Business.Concrete
                 var result = GetByUserEducation(userId, eduationId).Success;
                 if (result)
                 {
-                    return new SuccessResult(Messages.UserEducationCheck);
+                    return new ErrorResult(Messages.UserEducationCheck);
                 }
             }
-            return new ErrorResult();
+            return new SuccessResult();
         }
 
         public IResult Delete(UserEducation userEducation)
@@ -74,6 +81,16 @@ namespace Business.Concrete
                 return new SuccessResult();
             }
             return new ErrorResult();
+        }
+
+        public IDataResult<List<SelectUserEdApplicantDto>> GetAllEducationApplicant(int educationId)
+        {
+            var result = _userEducationDal.GetAllEducationApplicant(educationId);
+            if (result != null)
+            {
+                return new SuccessDataResult<List<SelectUserEdApplicantDto>>(result);
+            }
+            return new ErrorDataResult<List<SelectUserEdApplicantDto>>();
         }
 
         public IDataResult<List<SelectUserEducationDto>> GetAllSelectUserEducation(int userId)
@@ -103,6 +120,8 @@ namespace Business.Concrete
         }
 
         [SecuredOperation("user,admin")]
+        [ValidationAspect(typeof(UserEducationValidator))]
+
         public IResult Update(UserEducation userEducation)
         {
             if (userEducation != null)

@@ -12,14 +12,18 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfEducationContentDal : EfEntityRepositoryBase<EducationContent, YazContext>, IEducationContentDal
     {
+        private readonly YazContext _yazContext;
+        public EfEducationContentDal(YazContext context) : base(context)
+        {
+            _yazContext = context;
+        }
+
         public List<SelectEducationContentDto> GetAllEdContentByEdId(int educationId)
         {
-            using (YazContext context = new YazContext())
-            {
-                var result = from ec in context.EducationContents.Where(x => x.EducationId == educationId)
-                             join e in context.Educations
+                var result = from ec in _yazContext.EducationContents.Where(x => x.EducationId == educationId)
+                             join e in _yazContext.Educations
                              on ec.EducationId equals e.Id
-                             join f in context.Files
+                             join f in _yazContext.Files
                              on ec.Id equals f.EducationContentId
 
                              select new SelectEducationContentDto
@@ -32,7 +36,6 @@ namespace DataAccess.Concrete.EntityFramework
                                  Path = f.Path
                              };
                 return result.ToList();
-            }
         }
     }
 }

@@ -10,5 +10,6 @@ namespace DataAccess.Abstract
     public interface IUserEducationDal : IEntityRepository<UserEducation>
     {
         List<SelectUserEducationDto> GetAllSelectUserEducationDtos(int userId);
+        List<SelectUserEdApplicantDto> GetAllEducationApplicant(int educationId);
     }
 }

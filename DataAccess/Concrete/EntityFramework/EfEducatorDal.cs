@@ -11,5 +11,8 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfEducatorDal : EfEntityRepositoryBase<Educator, YazContext>, IEducatorDal
     {
+        public EfEducatorDal(YazContext context) : base(context)
+        {
+        }
     }
 }

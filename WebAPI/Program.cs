@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,17 @@ namespace WebAPI
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+            .UseSerilog((context, services, configuration) =>
+                {
+                    configuration.ReadFrom.Configuration(context.Configuration)
+             .ReadFrom.Services(services)
+             .Enrich.FromLogContext()
+             .MinimumLevel.Information()
+             .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information)
+             .WriteTo.Logger(lc => lc.Filter.ByIncludingOnly(evt => evt.Level == Serilog.Events.LogEventLevel.Information)
+                 .WriteTo.File("logs/logstart.txt", rollingInterval: RollingInterval.Day));
                 });
+
     }
 }

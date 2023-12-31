@@ -13,30 +13,30 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfUserDal : EfEntityRepositoryBase<User, YazContext>, IUserDal
     {
+        private readonly YazContext _yazContext;
+        public EfUserDal(YazContext context) : base(context)
+        {
+            _yazContext = context;
+        }
         public List<OperationClaim> GetClaims(User user)
         {
-            using (var context = new YazContext())
-            {
-                var result = from operationClaim in context.OperationClaims
-                             join userOperationClaim in context.UserOperationClaims
+                var result = from operationClaim in _yazContext.OperationClaims
+                             join userOperationClaim in _yazContext.UserOperationClaims
                                  on operationClaim.Id equals userOperationClaim.OperationClaimId
                              where userOperationClaim.UserId == user.Id
                              select new OperationClaim { Id = operationClaim.Id, Name = operationClaim.Name };
 
                 return result.ToList();
-            }
         }
 
         public List<SelectUserDto> GetAllUserDto()
         {
-            using (YazContext context = new YazContext())
-            {
-                var result = from u in context.Users
-                             join uop in context.UserOperationClaims
+                var result = from u in _yazContext.Users
+                             join uop in _yazContext.UserOperationClaims
                              on u.Id equals uop.UserId
                              into userOperationClaimTemp
                              from uopt in userOperationClaimTemp.DefaultIfEmpty()
-                             join op in context.OperationClaims
+                             join op in _yazContext.OperationClaims
                              on uopt.OperationClaimId equals op.Id
                               into operationClaimTemp
                              from opct in operationClaimTemp.DefaultIfEmpty()
@@ -54,7 +54,6 @@ namespace DataAccess.Concrete.EntityFramework
                              };
 
                 return result.ToList();
-            }
         }
     }
 }

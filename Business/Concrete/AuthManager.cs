@@ -1,8 +1,10 @@
 ﻿using Business.Abstract;
 using Business.Constans;
 using Business.ValidationRules.FluentValidation.User;
+using Core.Aspects.Autofac.Logging;
 using Core.Aspects.Autofac.Validation;
 using Core.Business;
+using Core.CrossCuttingConcerns.Logging.Serilog.Loggers;
 using Core.Entities.Concrete;
 using Core.Utilities.Result.Abstract;
 using Core.Utilities.Result.Concrete;
@@ -15,6 +17,7 @@ using System.Text;
 
 namespace Business.Concrete
 {
+    [LogAspect(typeof(FileLogger))]
     public class AuthManager : IAuthService
     {
         private IUserService _userService;
@@ -36,7 +39,7 @@ namespace Business.Concrete
 
             if (_userService.GetByMail(userForRegisterDto.Email) != null)
             {
-                return new ErrorDataResult<User>(Messages.CurrentMail);
+                return new ErrorDataResult<User>(message: Messages.CurrentMail);
             }
 
             HashingHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
@@ -71,7 +74,7 @@ namespace Business.Concrete
             {
                 return new SuccessDataResult<Core.Entities.Concrete.User>(userToCheck, "Başarılı giriş");
             }
-            return new ErrorDataResult<Core.Entities.Concrete.User>(result.Message);
+            return new ErrorDataResult<Core.Entities.Concrete.User>(Messages.LoginCheck);
 
         }
 

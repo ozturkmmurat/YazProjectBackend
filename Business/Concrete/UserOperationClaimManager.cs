@@ -1,6 +1,8 @@
 ﻿using Business.Abstract;
 using Business.BusinessAspects.Autofac;
 using Business.Constans;
+using Core.Aspects.Autofac.Logging;
+using Core.CrossCuttingConcerns.Logging.Serilog.Loggers;
 using Core.CrossCuttingConcers.Caching;
 using Core.Entities.Concrete;
 using Core.Utilities.IoC;
@@ -17,18 +19,15 @@ using System.Text;
 
 namespace Business.Concrete
 {
+    [LogAspect(typeof(FileLogger))]
     public class UserOperationClaimManager : IUserOperationClaimService
     {
         IUserOperationClaimDal _userOperationClaimDal;
-        private IHttpContextAccessor _httpContextAccessor;
-        private ICacheManager _cacheManager;
 
 
         public UserOperationClaimManager(IUserOperationClaimDal userOperationClaimDal)
         {
             _userOperationClaimDal = userOperationClaimDal;
-            _httpContextAccessor = ServiceTool.ServiceProvider.GetService<IHttpContextAccessor>();
-            _cacheManager = ServiceTool.ServiceProvider.GetService<ICacheManager>();
         }
 
         public IResult Add(UserOperationClaim userOperationClaim)

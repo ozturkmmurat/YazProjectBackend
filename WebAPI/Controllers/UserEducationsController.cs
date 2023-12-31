@@ -15,6 +15,19 @@ namespace WebAPI.Controllers
             _userEducationService = userEducationService;
         }
 
+
+        [HttpGet("SelectUserEdApplicantDto")]
+        public IActionResult SelectUserEdApplicantDto(int educationId)
+        {
+            var result = _userEducationService.GetAllEducationApplicant(educationId);
+
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
         [HttpGet("GetAllSelectUserEducation")]
         public IActionResult GetAllSelectUserEducation(int userId)
         {

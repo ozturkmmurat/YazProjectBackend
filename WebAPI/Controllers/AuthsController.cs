@@ -12,6 +12,7 @@ using Core.Utilities.Security.JWT;
 using System.Linq;
 using Business.Constans;
 using Core.Utilities.Messages;
+using Core.Utilities.Result.Concrete;
 
 namespace WebAPI.Controllers
 {
@@ -120,21 +121,20 @@ namespace WebAPI.Controllers
         [HttpPost("register")]
         public ActionResult Register(UserForRegisterDto userForRegisterDto)
         {
-            var userExists = _authService.UserExists(userForRegisterDto.Email);
-            if (!userExists.Success)
-            {
-                return BadRequest(userExists.Message);
-            }
-
             var registerResult = _authService.Register(userForRegisterDto, userForRegisterDto.Password);
-            var result = _authService.CreateAccessToken(registerResult.Data);
-
-            if (result.Success)
+            if (registerResult.Success)
             {
-                return Ok(result);
-            }
+                var result = _authService.CreateAccessToken(registerResult.Data);
 
-            return BadRequest(result.Message);
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+
+                return BadRequest(result.Message);
+            }
+            return BadRequest(registerResult.Message);
+
         }
     }
 }

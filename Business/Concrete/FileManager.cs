@@ -1,6 +1,11 @@
 ﻿using Business.Abstract;
 using Business.BusinessAspects.Autofac;
 using Business.Constans;
+using Business.ValidationRules.File;
+using Business.ValidationRules.FluentValidation.EducationContent;
+using Core.Aspects.Autofac.Logging;
+using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingConcerns.Logging.Serilog.Loggers;
 using Core.Helpers.FileHelper;
 using Core.Utilities.Result.Abstract;
 using Core.Utilities.Result.Concrete;
@@ -13,6 +18,7 @@ using System.Text;
 
 namespace Business.Concrete
 {
+    [LogAspect(typeof(FileLogger))]
     public class FileManager : IFileService
     {
         IFileDal _fileDal;
@@ -26,7 +32,7 @@ namespace Business.Concrete
         }
 
         [SecuredOperation("admin")]
-
+        [ValidationAspect(typeof(FileValidator))]
         public IResult Add(File file, IFormFile formFile)
         {
             if (file != null)
@@ -70,7 +76,7 @@ namespace Business.Concrete
         }
 
         [SecuredOperation("admin")]
-
+        [ValidationAspect(typeof(FileValidator))]
         public IResult Update(File file, IFormFile formFile)
         {
             if (file != null)
